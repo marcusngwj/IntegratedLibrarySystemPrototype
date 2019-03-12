@@ -5,8 +5,9 @@
  */
 package booklendingterminalclient;
 
-import ejb.session.stateful.LibraryOperationRemote;
 import ejb.session.stateless.StaffEntityControllerRemote;
+import ejb.session.stateful.LibraryOperationRemote;
+
 import entity.StaffEntity;
 import java.util.Scanner;
 import util.exception.EntityManagerException;
@@ -20,6 +21,7 @@ public class MainApp {
     private StaffEntityControllerRemote staffEntityControllerRemote;
     
     private LibraryOperationRemote libraryOperationRemote;
+    private LibraryOperationModule libraryOperationModule;
     
     private StaffEntity currentStaffEntity;
     
@@ -45,6 +47,7 @@ public class MainApp {
             if (response == LOGIN_OPERATION) {
                 try {
                     executeLogin();
+                    libraryOperationModule = new LibraryOperationModule();
                     executeMainAction();
                 }
                 catch (InvalidLoginException e) {
@@ -76,15 +79,16 @@ public class MainApp {
             }
             
             if (response == LIBRARY_OPERATION) {
-                
+                System.out.println();
+                libraryOperationModule.bootUpLibraryProgram();
             }
             else if (response == LOGOUT) {
                 System.out.println();
-                System.out.println("You have successfully logout!");
+                displayMessage("You have successfully logout!");
                 break;
             }
             else {
-                System.out.println("Invalid option, please try again!\n");
+                displayMessage("Invalid option, please try again!\n");
             }
             
             System.out.println();
