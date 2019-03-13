@@ -18,4 +18,5 @@ A pilot integrated library system that streamlines the process of registering ne
 
 ## Demo
 1. [Deployment](miscellaneous/video/Deploy_and_Run.mp4)
-1. [Login](miscellaneous/video/Login.mp4)
+2. [Login](miscellaneous/video/Login.mp4)
+3. [Registration](miscellaneous/video/Registeration.mp4)
