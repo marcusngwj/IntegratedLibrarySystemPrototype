@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +28,7 @@ public class MemberEntity implements Serializable {
     private String lastName;
     private String gender;
     private Integer age;
+    @Column(unique = true)
     private String identityNumber;
     private String phone;
     private String address;

@@ -7,12 +7,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-
-
-public class MySqlJdbcHelper
-{
-    public Connection createConnection() throws NamingException, SQLException
-    {
+public class MySqlJdbcHelper {
+    public static final int DUPLICATE_ENTRY = 1062;
+    
+    public Connection createConnection() throws NamingException, SQLException {
         Context context = new InitialContext();
         DataSource dataSource = (DataSource)context.lookup("jdbc/ILSDatasource");
         

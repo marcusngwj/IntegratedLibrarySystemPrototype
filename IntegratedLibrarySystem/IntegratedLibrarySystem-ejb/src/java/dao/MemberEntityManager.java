@@ -61,8 +61,16 @@ public class MemberEntityManager {
                 throw new EntityManagerException("An unknown error has occurred while creating the new member record");
             }
         }
-        catch(NamingException | SQLException ex) {
+        catch (NamingException ex) {
             throw new EntityManagerException("\n" + ex.getMessage());
+        }
+        catch (SQLException ex) {
+            if (ex.getErrorCode() == MySqlJdbcHelper.DUPLICATE_ENTRY) {
+                throw new EntityManagerException("Member with identification number of " + newMemberEntity.getIdentityNumber() + " was already registered.");
+            }
+            else {
+                throw new EntityManagerException(ex.getMessage());
+            }
         }
     }
     
