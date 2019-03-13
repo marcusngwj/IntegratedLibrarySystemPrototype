@@ -47,7 +47,7 @@ public class MainApp {
             if (response == LOGIN_OPERATION) {
                 try {
                     executeLogin();
-                    libraryOperationModule = new LibraryOperationModule();
+                    libraryOperationModule = new LibraryOperationModule(libraryOperationRemote);
                     executeMainAction();
                 }
                 catch (InvalidLoginException e) {

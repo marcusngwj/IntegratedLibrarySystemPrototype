@@ -36,11 +36,11 @@ public class BookEntity implements Serializable {
         this.year = year;
     }
 
-    public Long getId() {
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setId(Long bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
     

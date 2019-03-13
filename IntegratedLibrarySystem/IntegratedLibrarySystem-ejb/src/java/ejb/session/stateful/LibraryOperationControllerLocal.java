@@ -5,9 +5,11 @@
  */
 package ejb.session.stateful;
 
-import entity.StaffEntity;
+import entity.BookEntity;
+import entity.MemberEntity;
+import java.util.List;
 import javax.ejb.Local;
-import util.exception.InvalidLoginException;
+import util.exception.EntityManagerException;
 
 /**
  *
@@ -15,4 +17,12 @@ import util.exception.InvalidLoginException;
  */
 @Local
 public interface LibraryOperationControllerLocal {
+    
+    /** MEMBER_OPERATIONS**/
+    MemberEntity createNewMember(MemberEntity newMemberEntity) throws EntityManagerException;
+    List<MemberEntity> retrieveAllMembers() throws EntityManagerException;
+    
+    /** BOOK_OPERATIONS**/
+    BookEntity createNewBook(BookEntity newBookEntity) throws EntityManagerException;
+    List<BookEntity> retrieveAllBooks() throws EntityManagerException;
 }

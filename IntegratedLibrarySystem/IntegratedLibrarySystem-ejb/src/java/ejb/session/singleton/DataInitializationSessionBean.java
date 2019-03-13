@@ -5,8 +5,10 @@
  */
 package ejb.session.singleton;
 
-import ejb.session.stateful.LibraryOperationRemote;
+import ejb.session.stateful.LibraryOperationControllerLocal;
 import ejb.session.stateless.StaffEntityControllerLocal;
+import entity.BookEntity;
+import entity.MemberEntity;
 import entity.StaffEntity;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -17,7 +19,6 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import util.exception.EntityManagerException;
-import util.exception.StaffNotFoundException;
 import util.logger.Logger;
 
 /**
@@ -35,21 +36,29 @@ public class DataInitializationSessionBean {
    
     @EJB
     private StaffEntityControllerLocal staffEntityControllerLocal;
+    @EJB
+    private LibraryOperationControllerLocal libraryOperationControllerLocal;
     
     public DataInitializationSessionBean() {}
     
     @PostConstruct
     public void postConstruct() {               
+        verifyStaffEntityTable();
+        verifyMemberEntityTable();
+        verifyBookEntityTable();
+    }
+    
+    private void verifyStaffEntityTable() {
         try {
             List<StaffEntity> staffList = staffEntityControllerLocal.retrieveAllStaffs();
         }
         catch(EntityManagerException ex) {
-            initializeData();
+            initializeStaffEntityTable();
         }
     }
     
-    private void initializeData() {
-        Logger.log("DataInitializationSessionBean", "initializeData", "Initializing data...");
+    private void initializeStaffEntityTable() {
+        Logger.log("DataInitializationSessionBean", "initializeStaffEntityTable", "Initializing data...");
         
         try {
             staffEntityControllerLocal.createNewStaff(new StaffEntity((long)1, "Linda", "Chua", "linda", "password"));
@@ -57,18 +66,55 @@ public class DataInitializationSessionBean {
             staffEntityControllerLocal.createNewStaff(new StaffEntity((long)3, "Kelly", "Tan", "kelly", "password"));
         }
         catch(EntityManagerException ex) {
-            Logger.log("DataInitializationSessionBean", "initializeData", "Error in initializing Data: " + ex.getMessage());
+            Logger.log("DataInitializationSessionBean", "initializeStaffEntityTable", "Error in initializing Data: " + ex.getMessage());
         }
+    }
+    
+    private void verifyMemberEntityTable() {
+        try {
+            List<MemberEntity> MemberList = libraryOperationControllerLocal.retrieveAllMembers();
+        }
+        catch(EntityManagerException ex) {
+            initializeMemberEntityTable();
+        }
+    }
+    
+    private void initializeMemberEntityTable() {
+        Logger.log("DataInitializationSessionBean", "initializeMemberEntityTable", "Initializing data...");
         
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD001", "Product A1", "Product A1", 100, new BigDecimal("10.00"), "Category A"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD002", "Product A2", "Product A2", 100, new BigDecimal("25.50"), "Category A"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD003", "Product A3", "Product A3", 100, new BigDecimal("15.00"), "Category A"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD004", "Product B1", "Product B1", 100, new BigDecimal("20.00"), "Category B"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD005", "Product B2", "Product B2", 100, new BigDecimal("10.00"), "Category B"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD006", "Product B3", "Product B3", 100, new BigDecimal("100.00"), "Category B"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD007", "Product C1", "Product C1", 100, new BigDecimal("35.00"), "Category C"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD008", "Product C2", "Product C2", 100, new BigDecimal("20.05"), "Category C"));
-//        productEntityControllerLocal.createNewProduct(new ProductEntity("PROD009", "Product C3", "Product C3", 100, new BigDecimal("5.50"), "Category C"));
+        try {
+            libraryOperationControllerLocal.createNewMember(new MemberEntity((long)1, "Tony", "Teo", "Male", 44, "S7483027A", "87297373", "11 Tampines Ave 3"));
+            libraryOperationControllerLocal.createNewMember(new MemberEntity((long)2, "Wendy", "Tan", "Female", 35, "S8381028X", "97502837", "15 Computing Dr"));
+        }
+        catch(EntityManagerException ex) {
+            Logger.log("DataInitializationSessionBean", "initializeMemberEntityTable", "Error in initializing Data: " + ex.getMessage());
+        }
+    }
+    
+    private void verifyBookEntityTable() {
+        try {
+            List<BookEntity> BookList = libraryOperationControllerLocal.retrieveAllBooks();
+        }
+        catch(EntityManagerException ex) {
+            initializeBookEntityTable();
+        }
+    }
+    
+    private void initializeBookEntityTable() {
+        Logger.log("DataInitializationSessionBean", "initializeBookEntityTable", "Initializing data...");
+        
+        try {
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)1, "The Lord of the Rings", "S18018", 1954));
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)2, "Le Petit Prince", "S64921", 1943));
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)3, "Harry Potter and the Philosopher's Stone", "S38101", 1997));
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)4, "The Hobbit", "S19527", 1937));
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)5, "And Then There Were None", "S63288", 1939));
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)6, "Dream of the Red Chamber", "S32187", 1791));
+            libraryOperationControllerLocal.createNewBook(new BookEntity((long)7, "The Lion, the Witch and the Wardrobe", "S74569", 1950));
+        }
+        catch(EntityManagerException ex) {
+            Logger.log("DataInitializationSessionBean", "initializeBookEntityTable", "Error in initializing Data: " + ex.getMessage());
+        }
     }
     
 }
