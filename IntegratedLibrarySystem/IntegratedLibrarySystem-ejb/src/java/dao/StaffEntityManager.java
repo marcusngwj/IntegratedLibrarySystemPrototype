@@ -55,13 +55,16 @@ public class StaffEntityManager {
                 
                 if(resultSet != null && resultSet.next()) {
                     newStaffEntity.setStaffId(Integer.valueOf(resultSet.getInt("AUTO_INCREMENT") - 1).longValue());
+                    connection.close();
                     return newStaffEntity;
                 }
                 else {
+                    connection.close();
                     throw new EntityManagerException("An unknown error has occurred while retrieving the new Staff ID");
                 }
             }
             else {
+                connection.close();
                 throw new EntityManagerException("An unknown error has occurred while creating the new staff record");
             }
         }
@@ -88,9 +91,11 @@ public class StaffEntityManager {
                 while(resultSet.next());
             }
             else {
+                connection.close();
                 throw new EntityManagerException("There are no entries in staffentity");
             }
             
+            connection.close();
             return staffEntities;
         }
         catch(NamingException | SQLException ex) {

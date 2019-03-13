@@ -48,13 +48,16 @@ public class MemberEntityManager {
                 
                 if(resultSet != null && resultSet.next()) {
                     newMemberEntity.setMemberId(Integer.valueOf(resultSet.getInt("AUTO_INCREMENT") - 1).longValue());
+                    connection.close();
                     return newMemberEntity;
                 }
                 else {
+                    connection.close();
                     throw new EntityManagerException("An unknown error has occurred while retrieving the new Member ID");
                 }
             }
             else {
+                connection.close();
                 throw new EntityManagerException("An unknown error has occurred while creating the new member record");
             }
         }
@@ -81,9 +84,11 @@ public class MemberEntityManager {
                 while(resultSet.next());
             }
             else {
+                connection.close();
                 throw new EntityManagerException("There are no entries in staffentity");
             }
             
+            connection.close();
             return memberEntities;
         }
         catch(NamingException | SQLException ex) {
@@ -108,9 +113,11 @@ public class MemberEntityManager {
                 memberEntity = new MemberEntity(resultSet.getLong("MEMBERID"), resultSet.getString("FIRSTNAME"), resultSet.getString("LASTNAME"), resultSet.getString("GENDER"), resultSet.getInt("AGE"), resultSet.getString("IDENTITYNUMBER"), resultSet.getString("PHONE"), resultSet.getString("ADDRESS"));
             }
             else {
+                connection.close();
                 throw new MemberNotFoundException("The system has no record of member " + identityNumber);
             }
             
+            connection.close();
             return memberEntity;
         }
         catch(NamingException | SQLException ex) {

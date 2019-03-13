@@ -53,13 +53,16 @@ public class LendingEntityManager {
                 
                 if(resultSet != null && resultSet.next()) {
                     newLendingEntity.setLendId(Integer.valueOf(resultSet.getInt("AUTO_INCREMENT") - 1).longValue());
+                    connection.close();
                     return newLendingEntity;
                 }
                 else {
+                    connection.close();
                     throw new EntityManagerException("An unknown error has occurred while retrieving the new Member ID");
                 }
             }
             else {
+                connection.close();
                 throw new EntityManagerException("An unknown error has occurred while creating the new member record");
             }
         }
@@ -80,9 +83,11 @@ public class LendingEntityManager {
             ResultSet resultSet = preparedStatement.executeQuery();
             
             if(resultSet.next()) {
+                connection.close();
                 return true;
             }
             else {
+                connection.close();
                 return false;
             }
         }

@@ -14,3 +14,4 @@ A pilot integrated library system that streamlines the process of registering ne
 5. Clean and build all projects
 6. Deploy `IntegratedLibrarySystem-ejb`
 7. Run `BookLendingTerminalClient`
+8. Always stop glasfish server before clean, build and deploy. Watch [video](miscellaneous/video/Deploy_and_Run.mp4)

@@ -44,13 +44,16 @@ public class BookEntityManager {
                 
                 if(resultSet != null && resultSet.next()) {
                     newBookEntity.setBookId(Integer.valueOf(resultSet.getInt("AUTO_INCREMENT") - 1).longValue());
+                    connection.close();
                     return newBookEntity;
                 }
                 else {
+                    connection.close();
                     throw new EntityManagerException("An unknown error has occurred while retrieving the new Member ID");
                 }
             }
             else {
+                connection.close();
                 throw new EntityManagerException("An unknown error has occurred while creating the new member record");
             }
         }
@@ -77,9 +80,11 @@ public class BookEntityManager {
                 while(resultSet.next());
             }
             else {
+                connection.close();
                 throw new EntityManagerException("There are no entries in boookentity");
             }
             
+            connection.close();
             return bookEntities;
         }
         catch(NamingException | SQLException ex) {
@@ -104,9 +109,11 @@ public class BookEntityManager {
                 bookEntity = new BookEntity(resultSet.getLong("BOOKID"), resultSet.getString("TITLE"), resultSet.getString("ISBN"), resultSet.getInt("YEAR"));
             }
             else {
+                connection.close();
                 throw new BookNotFoundException("The system has no record of book " + bookId);
             }
             
+            connection.close();
             return bookEntity;
         }
         catch(NamingException | SQLException ex) {
