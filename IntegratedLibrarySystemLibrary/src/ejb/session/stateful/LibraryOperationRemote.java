@@ -7,6 +7,7 @@ package ejb.session.stateful;
 
 import entity.BookEntity;
 import entity.MemberEntity;
+import java.util.List;
 import javafx.util.Pair;
 import util.exception.BookNotFoundException;
 import util.exception.EntityManagerException;
@@ -18,6 +19,8 @@ import util.exception.MemberNotFoundException;
  */
 public interface LibraryOperationRemote {
     MemberEntity createNewMember(String firstName, String lastName, String gender, Integer age, String identityNumber, String phone, String address) throws EntityManagerException;
+    
+    List<BookEntity> retrieveAllBooks() throws EntityManagerException;
 
     Pair<MemberEntity, BookEntity> lendBook(Long bookId, String memberIdentityNumber) throws MemberNotFoundException, BookNotFoundException, EntityManagerException;
 }

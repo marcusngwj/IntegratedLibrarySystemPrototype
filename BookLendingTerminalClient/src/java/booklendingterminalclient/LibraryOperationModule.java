@@ -8,6 +8,7 @@ package booklendingterminalclient;
 import ejb.session.stateful.LibraryOperationRemote;
 import entity.BookEntity;
 import entity.MemberEntity;
+import java.util.List;
 import java.util.Scanner;
 import javafx.util.Pair;
 import util.exception.BookNotFoundException;
@@ -101,8 +102,10 @@ public class LibraryOperationModule {
     private void executeBookLending() {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println();
+        System.out.println();      
         System.out.println("*** ILS:: Library Operation :: Lend Book ***\n");
+        displayAllBooksInLibrary();
+        System.out.println(); 
         System.out.print("Enter Book Id> ");
         long bookId = Long.valueOf(scanner.nextLine().trim());
         System.out.print("Enter Member Identity Number> ");
@@ -122,6 +125,20 @@ public class LibraryOperationModule {
         else {
             displayMessage("An error occurred. Book is not lent. Please try again.");
         }
+    }
+    
+    private void displayAllBooksInLibrary() {
+        try {
+            List<BookEntity> booklist = libraryOperationRemote.retrieveAllBooks();
+            System.out.println("BOOK_ID  TITLE");
+            for (BookEntity bookEntity : booklist) {
+                System.out.println("   " + bookEntity.getBookId() + "     " + bookEntity.getTitle());
+            }
+        }
+        catch (EntityManagerException ex){
+            displayMessage(ex.getMessage());
+        }
+        
     }
     
     private int getUserResponse() {

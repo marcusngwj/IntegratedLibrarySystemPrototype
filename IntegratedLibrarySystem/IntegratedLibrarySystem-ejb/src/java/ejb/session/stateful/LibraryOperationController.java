@@ -84,8 +84,8 @@ public class LibraryOperationController implements LibraryOperationControllerLoc
     
     public Pair<MemberEntity, BookEntity> lendBook(Long bookId, String memberIdentityNumber) throws MemberNotFoundException, BookNotFoundException, EntityManagerException {
         Logger.log("LibraryOperationController", "lendBook", "Using Remote Interface");
-        MemberEntity memberEntity = MemberEntityManager.retrieveMemberWithIdentityNumber(memberIdentityNumber);
         BookEntity bookEntity = BookEntityManager.retrieveBookWithId(bookId);
+        MemberEntity memberEntity = MemberEntityManager.retrieveMemberWithIdentityNumber(memberIdentityNumber);
         lendingEntityManager.lendBook(new LendingEntity(DUMMY_ID, memberEntity.getMemberId(), bookId, getCurrentDate()));
         return new Pair<MemberEntity, BookEntity>(memberEntity, bookEntity);
     }

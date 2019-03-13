@@ -63,7 +63,6 @@ public class DataInitializationSessionBean {
         try {
             staffEntityControllerLocal.createNewStaff(new StaffEntity((long)1, "Linda", "Chua", "linda", "password"));
             staffEntityControllerLocal.createNewStaff(new StaffEntity((long)2, "Barbara", "Durham", "barbara", "password"));
-            staffEntityControllerLocal.createNewStaff(new StaffEntity((long)3, "Kelly", "Tan", "kelly", "password"));
         }
         catch(EntityManagerException ex) {
             Logger.log("DataInitializationSessionBean", "initializeStaffEntityTable", "Error in initializing Data: " + ex.getMessage());

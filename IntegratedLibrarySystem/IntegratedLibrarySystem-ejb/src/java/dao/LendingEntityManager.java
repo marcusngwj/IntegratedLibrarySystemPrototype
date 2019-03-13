@@ -23,7 +23,18 @@ public class LendingEntityManager {
     public LendingEntityManager() {}
     
     public LendingEntity lendBook(LendingEntity newLendingEntity) throws EntityManagerException {
-        Logger.log("BookEntityManager", "createNewBook");
+        if (isBookLent(newLendingEntity.getBookId())) {
+            throw new EntityManagerException("The book is currently unavailable. Please come back again.");
+        }
+        else {
+            newLendingEntity = executeLendBook(newLendingEntity);
+        }
+        
+        return newLendingEntity;
+    }
+    
+    private LendingEntity executeLendBook(LendingEntity newLendingEntity) throws EntityManagerException {
+        Logger.log("LendingEntityManager", "lendBook");
         
         try {
             String sql = "INSERT INTO lendingentity (`MEMBERID`, `BOOKID`, `LENDDATE`) VALUES (?,?,?);";
@@ -54,6 +65,29 @@ public class LendingEntityManager {
         }
         catch(NamingException | SQLException ex) {
             throw new EntityManagerException("\n" + ex.getMessage());
+        }
+    }
+    
+    private boolean isBookLent(Long bookId) throws EntityManagerException {
+        Logger.log("LendingEntityManager", "isBookLent");
+        
+        try {
+            String sql = "SELECT * FROM lendingentity WHERE BOOKID = ?;";
+            
+            Connection connection = new MySqlJdbcHelper().createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, bookId);            
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            if(resultSet.next()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch(NamingException | SQLException ex) {
+            throw new EntityManagerException(ex.getMessage());
         }
     }
 }
