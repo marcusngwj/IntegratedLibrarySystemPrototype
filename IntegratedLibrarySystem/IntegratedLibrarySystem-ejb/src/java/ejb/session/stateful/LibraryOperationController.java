@@ -6,9 +6,13 @@
 package ejb.session.stateful;
 
 import dao.BookEntityManager;
+import dao.LendingEntityManager;
 import dao.MemberEntityManager;
 import entity.BookEntity;
+import entity.LendingEntity;
 import entity.MemberEntity;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javafx.util.Pair;
 import javax.ejb.Local;
@@ -35,12 +39,14 @@ public class LibraryOperationController implements LibraryOperationControllerLoc
     
     private MemberEntityManager memberEntityManager;
     private BookEntityManager bookEntityManager;
+    private LendingEntityManager lendingEntityManager;
     
     private static final long DUMMY_ID = 0;
 
     public LibraryOperationController() {
         this.memberEntityManager = new MemberEntityManager();
         this.bookEntityManager = new BookEntityManager();
+        this.lendingEntityManager = new LendingEntityManager();
     }
     
     /************ MEMBER_OPERATIONS ************/
@@ -75,10 +81,22 @@ public class LibraryOperationController implements LibraryOperationControllerLoc
     
     
     /************ LENDING_OPERATIONS ************/
+    
     public Pair<MemberEntity, BookEntity> lendBook(Long bookId, String memberIdentityNumber) throws MemberNotFoundException, BookNotFoundException, EntityManagerException {
         Logger.log("LibraryOperationController", "lendBook", "Using Remote Interface");
         MemberEntity memberEntity = MemberEntityManager.retrieveMemberWithIdentityNumber(memberIdentityNumber);
         BookEntity bookEntity = BookEntityManager.retrieveBookWithId(bookId);
+        lendingEntityManager.lendBook(new LendingEntity(DUMMY_ID, memberEntity.getMemberId(), bookId, getCurrentDate()));
         return new Pair<MemberEntity, BookEntity>(memberEntity, bookEntity);
     }
+    
+    
+    /************ OTHERS ************/
+    
+    private Date getCurrentDate() {
+	LocalDate localDate = LocalDate.now();
+        Date date = java.sql.Date.valueOf(localDate);
+	return date;
+    }
+
 }
