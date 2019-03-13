@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
 import util.database.MySqlJdbcHelper;
+import util.exception.BookNotFoundException;
 import util.exception.EntityManagerException;
 import util.logger.Logger;
 
@@ -80,6 +81,33 @@ public class BookEntityManager {
             }
             
             return bookEntities;
+        }
+        catch(NamingException | SQLException ex) {
+            throw new EntityManagerException(ex.getMessage());
+        }
+    }
+    
+    public static BookEntity retrieveBookWithId(Long bookId) throws BookNotFoundException, EntityManagerException {
+        Logger.log("BookEntityManager", "retrieveBookWithId");
+        
+        try {
+            String sql = "SELECT * FROM bookentity WHERE BOOKID = ?;";
+            
+            Connection connection = new MySqlJdbcHelper().createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql); 
+            preparedStatement.setLong(1, bookId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            BookEntity bookEntity;
+            
+            if(resultSet.next()) {
+                bookEntity = new BookEntity(resultSet.getLong("BOOKID"), resultSet.getString("TITLE"), resultSet.getString("ISBN"), resultSet.getInt("YEAR"));
+            }
+            else {
+                throw new BookNotFoundException("The system has no record of book " + bookId);
+            }
+            
+            return bookEntity;
         }
         catch(NamingException | SQLException ex) {
             throw new EntityManagerException(ex.getMessage());

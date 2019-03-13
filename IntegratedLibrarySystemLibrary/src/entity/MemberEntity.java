@@ -106,7 +106,11 @@ public class MemberEntity implements Serializable {
     
     public void setAddress(String address) {
         this.address = address;
-    }            
+    }
+    
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
     
     @Override
     public int hashCode() {

@@ -24,5 +24,5 @@ public interface LibraryOperationControllerLocal {
     
     /** BOOK_OPERATIONS**/
     BookEntity createNewBook(BookEntity newBookEntity) throws EntityManagerException;
-    List<BookEntity> retrieveAllBooks() throws EntityManagerException;
+    List<BookEntity> retrieveAllBooks() throws EntityManagerException ;
 }

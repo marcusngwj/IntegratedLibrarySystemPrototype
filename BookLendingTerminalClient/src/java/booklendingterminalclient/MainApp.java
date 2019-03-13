@@ -111,7 +111,7 @@ public class MainApp {
         if(username.length() > 0 && password.length() > 0) {
             try {
                 currentStaffEntity = staffEntityControllerRemote.staffLogin(username, password);
-                System.out.println("\nLogin successful!\n");
+                System.out.println("Login successful!\n");
             }
             catch (EntityManagerException e) {
                 System.out.println("\nInvalid login credential: " + e.getMessage());

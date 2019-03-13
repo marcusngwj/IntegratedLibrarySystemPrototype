@@ -10,12 +10,15 @@ import dao.MemberEntityManager;
 import entity.BookEntity;
 import entity.MemberEntity;
 import java.util.List;
+import javafx.util.Pair;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import util.exception.BookNotFoundException;
 import util.exception.EntityManagerException;
+import util.exception.MemberNotFoundException;
 import util.logger.Logger;
 
 /**
@@ -68,5 +71,14 @@ public class LibraryOperationController implements LibraryOperationControllerLoc
     public List<BookEntity> retrieveAllBooks() throws EntityManagerException {
         Logger.log("LibraryOperationController", "retrieveAllBooks", "Using Local Interface");
         return bookEntityManager.retrieveAllBooks();
+    }
+    
+    
+    /************ LENDING_OPERATIONS ************/
+    public Pair<MemberEntity, BookEntity> lendBook(Long bookId, String memberIdentityNumber) throws MemberNotFoundException, BookNotFoundException, EntityManagerException {
+        Logger.log("LibraryOperationController", "lendBook", "Using Remote Interface");
+        MemberEntity memberEntity = MemberEntityManager.retrieveMemberWithIdentityNumber(memberIdentityNumber);
+        BookEntity bookEntity = BookEntityManager.retrieveBookWithId(bookId);
+        return new Pair<MemberEntity, BookEntity>(memberEntity, bookEntity);
     }
 }

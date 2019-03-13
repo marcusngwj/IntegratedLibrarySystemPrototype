@@ -15,6 +15,7 @@ import java.util.List;
 import javax.naming.NamingException;
 import util.database.MySqlJdbcHelper;
 import util.exception.EntityManagerException;
+import util.exception.MemberNotFoundException;
 import util.logger.Logger;
 
 /**
@@ -63,7 +64,7 @@ public class MemberEntityManager {
     }
     
     public static List<MemberEntity> retrieveAllMembers() throws EntityManagerException {
-        Logger.log("StaffEntityManager", "retrieveAllMembers");
+        Logger.log("MemberEntityManager", "retrieveAllMembers");
         
         try {
             List<MemberEntity> memberEntities = new ArrayList<>();
@@ -84,6 +85,33 @@ public class MemberEntityManager {
             }
             
             return memberEntities;
+        }
+        catch(NamingException | SQLException ex) {
+            throw new EntityManagerException(ex.getMessage());
+        }
+    }
+    
+    public static MemberEntity retrieveMemberWithIdentityNumber(String identityNumber) throws MemberNotFoundException, EntityManagerException {
+        Logger.log("MemberEntityManager", "retrieveMemberIdUsingIdentityNumber");
+        
+        try {
+            String sql = "SELECT * FROM memberentity WHERE IDENTITYNUMBER= ?;";
+            
+            Connection connection = new MySqlJdbcHelper().createConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql); 
+            preparedStatement.setString(1, identityNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            MemberEntity memberEntity;
+            
+            if(resultSet.next()) {
+                memberEntity = new MemberEntity(resultSet.getLong("MEMBERID"), resultSet.getString("FIRSTNAME"), resultSet.getString("LASTNAME"), resultSet.getString("GENDER"), resultSet.getInt("AGE"), resultSet.getString("IDENTITYNUMBER"), resultSet.getString("PHONE"), resultSet.getString("ADDRESS"));
+            }
+            else {
+                throw new MemberNotFoundException("The system has no record of member " + identityNumber);
+            }
+            
+            return memberEntity;
         }
         catch(NamingException | SQLException ex) {
             throw new EntityManagerException(ex.getMessage());
